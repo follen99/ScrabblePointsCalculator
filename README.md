@@ -1,6 +1,10 @@
 # ScrabblePointsCalculator
+![image](https://github.com/follen99/ScrabblePointsCalculator/blob/main/screenshots/home_pieno.png?raw=true)
+
 Questo programma scritto in *Python* crea un semplice server locale che ci permette di accedere, tramite l'indirizzo 
 > 127.0.0.1:5000 
+
+
 alla pagina web. In questa pagina è possibile inserire delle parole, ed il programma calcolerà il punteggio di *Scarabeo* associato.
 
 E' possibile anche aggiungere le parole ad una lista, in modo da poterne tenere traccia.
