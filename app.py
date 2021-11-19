@@ -1,15 +1,20 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 import sqlite3
+from threading import Thread
 
 app = Flask(__name__)  
 
 wordList = []
 latestWord = []
 
+if __name__ == "__main__":
+	app.run(debug=True)
+
 @app.route('/')
 def index():
     points = 0
-    return render_template('index.html', points=points)
+    address = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)  
+    return render_template('index.html', points=points, address=address)
 
 @app.route('/', methods=['POST'])
 def indexPost():
@@ -40,6 +45,7 @@ class Parola:
     def __init__(self, word, points):
         self.word = word
         self.points = points
+
 
 
 a=1
