@@ -4,40 +4,89 @@ from threading import Thread
 
 app = Flask(__name__)  
 
-wordList = []
-latestWord = []
+
+
+connections = []
+persone = []
+
+class Persona:
+    wordList = []
+    latestWord = []
+
+    def __init__(self, ip):
+        self.ip = ip
+    def getLatestWord(self):
+        return self.latestWord
+    def getWordList(self):
+        return self.wordList
+    def addToWordList(self, word):
+        self.wordList.append(word)
+    def addToLatestWord(self, word):
+        self.latestWord.append(word)
+    def popFromLatestWord(self):
+        self.latestWord.pop()
+    
+
+def checkContain(newIP):
+    for connection in connections:
+        if connection == newIP:
+            return True
+    return False
+
+def checkContainPersona(ip):
+    for person in persone:
+        if person.ip == ip:
+            return True
+    return False
+
+def getPersonaByIP(ip):
+    for person in persone:
+        if person.ip == ip:
+            return person
 
 if __name__ == "__main__":
-	app.run(debug=True)
+    app.run(host="localhost", port=5000)
 
 @app.route('/')
 def index():
     points = 0
     address = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)  
     
+    if not checkContain(address):
+        connections.append(address)
 
-    if wordList:
-        return render_template('index.html', points=points, totalPoints=calcTotalPoints(wordList), wordList=wordList)
-    return render_template('index.html', points=points, address=address)
+    if not checkContainPersona(address):
+        persona = Persona(address)
+        persone.append(persona)
+        return render_template('index.html', points=points, address=address, connections=connections)
+
+    persona = getPersonaByIP(address)
+    return render_template('index.html',points=points, totalPoints=calcTotalPoints(persona.wordList), wordList=persona.wordList, address=address)
 
 @app.route('/', methods=['POST'])
 def indexPost():
+    address = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)  
+    #latestWord = getPersonaByIP(address).latestWord
+    #wordList = getPersonaByIP(address).wordList
+    currentPerson = getPersonaByIP(address)
+
     if request.form['submit_button'] == 'calc':
+        
         word = request.form['word']
         
-        if latestWord:
-            latestWord.pop() # remove the last word from the list, in questo modo abbiamo sempre un solo elemento nella lista
-        latestWord.append(word)
+        if currentPerson.latestWord:
+            currentPerson.latestWord.pop() # remove the last word from the list, in questo modo abbiamo sempre un solo elemento nella lista
+        currentPerson.latestWord.append(word)
 
         points = calcPoints(word)
-        return render_template('index.html', points=points, totalPoints=calcTotalPoints(wordList), wordList=wordList)
+        return render_template('index.html', points=points, totalPoints=calcTotalPoints(currentPerson.wordList), wordList=currentPerson.wordList)
     elif request.form['submit_button'] == 'add':
-        if latestWord: # check if list is empty
-            temp = latestWord.pop() # remove the last word from the list, in questo modo abbiamo sempre un solo elemento nella lista
+        if currentPerson.latestWord: # check if list is empty
+            temp = currentPerson.latestWord.pop() # remove the last word from the list, in questo modo abbiamo sempre un solo elemento nella lista
             w1 = Parola(temp, calcPoints(temp))
-            wordList.append(w1)
+            currentPerson.wordList.append(w1)
 
-        return render_template('index.html', points='0', totalPoints=calcTotalPoints(wordList), wordList=wordList)
+        return render_template('index.html', points='0', totalPoints=calcTotalPoints(currentPerson.wordList), wordList=currentPerson.wordList)
 
 def calcTotalPoints(wordList):
     points = 0
@@ -49,7 +98,6 @@ class Parola:
     def __init__(self, word, points):
         self.word = word
         self.points = points
-
 
 
 a=1
