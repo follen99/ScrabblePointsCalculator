@@ -38,6 +38,9 @@ def indexPost():
             wordList.append(w1)
 
         return render_template('index.html', points='0', totalPoints=calcTotalPoints(wordList), wordList=wordList)
+    elif request.form['submit_button'] == 'deleteAll':
+        wordList.clear()
+        return render_template('index.html', points='0', totalPoints=calcTotalPoints(wordList), wordList=wordList)
 
 def calcTotalPoints(wordList):
     points = 0
