@@ -4,7 +4,7 @@ import sqlite3
 app = Flask(__name__)  
 
 wordList = []
-history = []
+latestWord = []
 
 @app.route('/')
 def index():
@@ -15,13 +15,32 @@ def index():
 def indexPost():
     if request.form['submit_button'] == 'calc':
         word = request.form['word']
-        history.append(word)
+        
+        if latestWord:
+            latestWord.pop() # remove the last word from the list, in questo modo abbiamo sempre un solo elemento nella lista
+        latestWord.append(word)
+
         points = calcPoints(word)
-        return render_template('index.html', points=points)
+        return render_template('index.html', points=points, totalPoints=calcTotalPoints(wordList), wordList=wordList)
     elif request.form['submit_button'] == 'add':
-        wordList.append(history.pop())
-        print(wordList)     # wordlist contiene tutte le parole che l'utente vuole contare
-        return render_template('index.html', points='0')
+        if latestWord: # check if list is empty
+            temp = latestWord.pop() # remove the last word from the list, in questo modo abbiamo sempre un solo elemento nella lista
+            w1 = Parola(temp, calcPoints(temp))
+            wordList.append(w1)
+
+        return render_template('index.html', points='0', totalPoints=calcTotalPoints(wordList), wordList=wordList)
+
+def calcTotalPoints(wordList):
+    points = 0
+    for word in wordList:
+        points += word.points
+    return points
+
+class Parola:
+    def __init__(self, word, points):
+        self.word = word
+        self.points = points
+
 
 a=1
 b=3
