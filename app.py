@@ -3,6 +3,9 @@ import sqlite3
 
 app = Flask(__name__)  
 
+wordList = []
+history = []
+
 @app.route('/')
 def index():
     points = 0
@@ -10,10 +13,15 @@ def index():
 
 @app.route('/', methods=['POST'])
 def indexPost():
-    word = request.form['word']
-    points = calcPoints(word)
-    return render_template('index.html', points=points)
-
+    if request.form['submit_button'] == 'calc':
+        word = request.form['word']
+        history.append(word)
+        points = calcPoints(word)
+        return render_template('index.html', points=points)
+    elif request.form['submit_button'] == 'add':
+        wordList.append(history.pop())
+        print(wordList)     # wordlist contiene tutte le parole che l'utente vuole contare
+        return render_template('index.html', points='0')
 
 a=1
 b=3

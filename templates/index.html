@@ -15,6 +15,20 @@
             border: none !important;
             font-size: large !important;
         }
+
+        .alert .btn-danger {
+            float: right;
+        }
+
+        .alert span {
+            line-height: 34px;
+        }
+
+        .alert > div:after {
+            clear: both;
+            content: '';
+            display: table;
+        }
     </style>
     <title>Scrabble Calculator</title>
   </head>
@@ -23,22 +37,31 @@
         <div class="container-fluid"><a class="navbar-brand" href="/">Scrabble Points Calculator</a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navcol-1">
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link active" href="#">First Item</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Second Item</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Third Item</a></li>
+                    <!--<li class="nav-item"><a class="nav-link active" href="#">First Item</a></li>-->
+                    <!--<li class="nav-item"><a class="nav-link" href="#">Second Item</a></li>-->
+                    <li class="nav-item"><a class="nav-link active" href="https://github.com/follen99">Credits</a></li>
                 </ul>
             </div>
         </div>
     </nav>
     <form method="POST" class="m-3">
-        <div class="form-group" style="padding: 120px;" >
+        <div class="form-group" style="padding: 120px; padding-top: 20px;" >
             <div class="card">
                 <div class="card-body" style="margin: 20px;">
                     <h4 class="card-title">Calcola Parola</h4>
-                    <div class="input-group mb-3"><input type="text" name="word" placeholder="Inserisci la parola da calcolare" class="form-control"><button class="btn btn-primary" type="submit">Calcola</button></div>
-                    <div class="alert alert-success" role="alert"><span><strong>La parola vale&nbsp;</strong></span>
-                        <h1>{{points}} punti</h1>
+                    <div class="input-group mb-3"><input type="text" name="word" placeholder="Inserisci la parola da calcolare" class="form-control"><button class="btn btn-primary" type="submit" value="calc" name="submit_button">Calcola</button></div>
+                    
+                    <div>
+                        <div class="alert alert-success" role="alert"><span><strong>La parola vale&nbsp;</strong></span>
+                            <h1>{{points}} punti</h1>
+                        </div>
+
+                        <button class="btn btn-primary" type="submit" value="add" name="submit_button">Aggiungi</button>
+
                     </div>
+
+                
+
                 </div>
             </div>
         </div>
